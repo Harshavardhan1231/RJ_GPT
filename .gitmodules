@@ -1,0 +1,7 @@
+[submodule "radio_jockey_react"]
+    path = radio_jockey
+    url = https://github.com/Harshavardhan1231/radio_jockey_react.git
+
+[submodule "rj_react"]
+    path = rj
+    url = https://github.com/Harshavardhan1231/rj_react.git
