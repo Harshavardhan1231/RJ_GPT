@@ -7,7 +7,7 @@ song.wav
 ApplioV3.2.1
 flask_app/radio_jockey
 flask_app/rj
-radio_jockey
-rj
+radio_jockey/build
+rj/build
 env
 song.wav
