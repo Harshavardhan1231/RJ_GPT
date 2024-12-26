@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <title>index</title>
+  </head>
+  <body>
+    <div>
+      <form id="startForm">
+        <label for="song_name">Please enter a song</label>
+        <input type="text" id="song_name" name="input_box" class="text" />
+        <!-- Added name attribute -->
+        <button type="submit">Play song</button>
+      </form>
+
+      <form id="playlistForm">
+        <label for="next_song">Please enter a song</label>
+        <input type="text" id="next_song" name="next_song" />
+        <button type="submit">Add to Playlist</button>
+      </form>
+
+      <button id="host">Host spotify</button>
+      <div id="status">Status will be displayed here</div>
+      <div id="variable">Dynamic variable will be displayed here</div>
+
+      <ul id="playlist"></ul>
+    </div>
+
+    <!-- <ul id="playlist"></ul> -->
+  </body>
+  <script>
+    const socket = io();
+    document.getElementById("playlistForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const userInput = document.getElementById("next_song").value;
+      console.log("Emitting start_add_task event with param:", userInput);
+      socket.emit("add_song", { param: userInput });
+    });
+
+    document.getElementById("startForm").onsubmit = function (e) {
+      e.preventDefault();
+      const userInput = document.getElementById("song_name").value;
+      socket.emit("start_task", { param: userInput });
+    };
+
+    document.getElementById("host").addEventListener("click", () => {
+      console.log("button clicked");
+      socket.emit("host_spotify");
+    });
+
+    function updatePlaylistUI(playlist) {
+      const playlistElement = document.getElementById("playlist");
+      playlistElement.innerHTML = ""; // Clear current playlist
+
+      playlist.forEach((item, index) => {
+        const li = document.createElement("li");
+        const remove = document.createElement("button");
+        remove.textContent = "Remove";
+
+        remove.onclick = () => {
+          socket.emit("remove_song", { index: index });
+        };
+
+        li.textContent = `${item[1]} (ID: ${item[0]})`;
+        playlistElement.appendChild(li);
+        li.appendChild(remove);
+      });
+    }
+
+    socket.on("playlist_update", (data) => {
+      console.log("Received playlist_update event:", data);
+      const playlist = data.value;
+      updatePlaylistUI(playlist);
+    });
+  </script>
+</html>

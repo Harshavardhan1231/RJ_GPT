@@ -1,0 +1,13 @@
+# .gitignore
+.env
+.cache
+hello.wav
+end.wav
+song.wav
+ApplioV3.2.1
+flask_app/radio_jockey
+flask_app/rj
+radio_jockey
+rj
+env
+song.wav
